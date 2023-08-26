@@ -1,11 +1,12 @@
 module Api
   module V1
-    class AirlineController < ApplicationController
+    class Api::V1::AirlinesController < ApplicationController
       protect_from_forgery with: :null_session
+      
       def index
         airlines = Airline.all
 
-        render json: AirlineSerializer.ne(airlines, options).serialized_json
+        render json: AirlineSerializer.new(airlines, options).serialized_json
       end
 
       def show
@@ -19,7 +20,6 @@ module Api
 
         if airline.save
           render json: AirlineSerializer.new(airline).serialized_json
-
         else
           render json: { error: airline.errors.messages }, status: 422
         end
@@ -53,7 +53,7 @@ module Api
       end
 
       def options
-        @options ||= { include: %i[:reviews] }
+        @options ||= { include: %i[reviews] }
       end
     end
   end
